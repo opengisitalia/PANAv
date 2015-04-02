@@ -1,12 +1,136 @@
 <!DOCTYPE html>
-<html lang="it-IT">
+<html>
   <head>
-    <meta charset="UTF-8">
-    <title>Panav by opengisitalia</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
-  <body>
-<p>Ciao belli!</p>  
-  </body>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+	<link href='http://fonts.googleapis.com/css?family=Mako' rel='stylesheet' type='text/css'>
+    <title>PANav</title>
+	
+    
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+
+	
+	
+	<!-- Mobile 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+	-->	
+	
+	<script type="text/javascript" src="pa.js"></script>
+	<link rel="stylesheet" href="css/app.css" />
+	
+	<!--
+	<script type="text/javascript" src="https://apis.google.com/js/plusone.js">
+		{"parsetags": "explicit"}
+	</script>
+	-->
+	
+		<script>
+			var map, markerHere, marker_selected;
+			var markers = [];
+			var elem_percorso = [];
+			
+			var servizio;
+			
+			var dict_turismo01 = {};
+			var dict_turismo03 = {};
+						
+			var icons = {
+				'farmacie': 'img/Vettoriali/farmacia.png',
+				'giardini_punti': 'img/Vettoriali/giardini.png',
+				'monumenti': 'img/Vettoriali/monumenti.png',
+				'monumenti_unesco': 'img/Vettoriali/unesco.png',	
+				'parcheggi': 'img/Vettoriali/parcheggi.png',		
+				'poste': 'img/Vettoriali/poste.png',
+				'ricettive': 'img/Vettoriali/ricettive.png',	
+				'centri_sportivi_comunali': 'img/Vettoriali/centri_sportivi_comunali.png'
+
+			};
+			
+			var image = "img/Vettoriali/markerHere.png";
+			
+			var geocoder = new google.maps.Geocoder();			
+			//var directionsDisplay;
+			var directionsService = new google.maps.DirectionsService();
+
+			var back_to = ["home"];
+			var modo;
+
+			google.maps.event.addDomListener(window, 'load', initialize);
+
+			$(document).ready(function() {
+			  $.ajaxSetup({ cache: true });
+			  $.getScript('//connect.facebook.net/en_UK/all.js', function(){
+				FB.init({
+				  appId: '720044651350537',
+				  xfbml: true
+				});     
+				$('#loginbutton,#feedbutton').removeAttr('disabled');
+				//FB.getLoginStatus(updateStatusCallback);
+			  });
+			});
+		</script>
+	</head>
+	<body>	
+  
+	<div id="container">
+
+
+		<div id="panav">
+		<!-- <input id ="panav_btn" type="button" class="submenu_title" style="margin:0; padding:0; background: rgba(255, 153, 204, 0.9) url('img/Vettoriali/menu.png') left no-repeat" onclick="scelta(this.id)" />-->
+		<button type="button" class="submenu_title" id ="panav_btn" onclick="scelta(this.id)"> <img src="img/Vettoriali/menu.png" style="border:none;margin:0; padding:0;"  /></button>
+		</div>
+
+
+		<div id="scelta"> 	    
+		  <button type="button" class="submenu_title_black" id="dovedormire" onclick="scelta(this.id)"> <img src="img/Vettoriali/dovedormire.png" style="border:none;margin:0; padding:0;"  /></button>
+		  <button type="button" class="submenu_title_black" id="cosavedere" onclick="scelta(this.id)"> <img src="img/Vettoriali/cosavedere.png" style="border:none;margin:0; padding:0;"  /></button>
+		  <button type="button" class="submenu_title_black" id="notiziebtn" onclick="scelta(this.id)"> <img src="img/Vettoriali/notizie.png" style="border:none;margin:0; padding:0;"  /></button>
+		  <button type="button" class="submenu_title_black" id="posizione" onclick="scelta(this.id)"> <img src="img/Vettoriali/posizione.png" style="border:none;margin:0; padding:0;"  /></button>
+		  <button type="button" class="submenu_title_black" id="help" onclick="scelta(this.id)"> <img src="img/Vettoriali/help.png" style="border:none;margin:0; padding:0;"  /></button>
+		  
+		<!--
+		  <div class="submenu_title_black"><input type="button" class="submenu_title" style="border:none;margin:0; padding:0; background: url('img/Vettoriali/dovedormire.png') left no-repeat" id="dovedormire" onclick="scelta(this.id)" /></div>
+		  <div class="submenu_title_black"><input type="button" class="submenu_title" style="border:none;margin:0; padding:0; background: url('img/Vettoriali/cosavedere.png') left no-repeat" id="cosavedere"  onclick="scelta(this.id)" /></div>
+		  <div class="submenu_title_black"><input type="button" class="submenu_title" style="border:none;margin:0; padding:0; background: url('img/Vettoriali/notizie.png') left no-repeat" id="notiziebtn" onclick="scelta(this.id)"/></div>
+		  <div class="submenu_title_black"><input type="button" class="submenu_title" style="border:none;margin:0; padding:0; background: url('img/Vettoriali/posizione.png') left no-repeat" id="posizione" onclick="scelta(this.id)" /></div>
+		-->
+		</div>
+		
+		<div id="scelta_posizione"> 	    
+			<!-- <div class="submenu_title_black"><input type="button" class="submenu_title" style="border:none;margin:0; padding:0; background: url('img/Vettoriali/automatico.png') left no-repeat" id="" onclick="geolocation()" /></div>
+			-->
+			<button type="button" class="submenu_title_black" id="" onclick="geolocation()"> <img src="img/Vettoriali/automatico.png" style="border:none;margin:0; padding:0;"  /></button>
+			<div class="submenu_title_black"><input id="pac-input" type="text" class="submenu_title" style="border:none;margin:0; padding:0;"  placeholder="Cerca indirizzo"/></div>
+		
+		</div>		
+		
+		
+		<div id="map-canvas"></div>	
+
+		<div class="container_info"> 
+			<div class="info"> 
+				
+				<!--<input type="button" id="close" onclick="chiudi()" class="submenu_title" style="margin:0; padding:0; background: rgba(255, 153, 204, 0.9) url('img/Vettoriali/indietro.png') left no-repeat" />-->
+				<button type="button" id="close" onclick="chiudi()" class="submenu_title" style="background: rgba(255, 153, 204, 0.9)"> <img src="img/Vettoriali/indietro.png" style="border:none;margin:0; padding:0;"  />	</button>
+			</div>
+		</div>
+		
+		<!--
+		<div id="notizie">
+				<a class="twitter-timeline" height="100%" href="https://twitter.com/ComunePalermo"  data-widget-id="453898198050820096">Tweets di @ComunePalermo</a>
+				
+		</div>
+		-->
+		
+	
+		
+	</div>	
+	<div id="temp" style="display:none;position:absolute;bottom:10px;left:10px;z-index:100;color:#ec00ff;overflow:auto;">home</div>
+	</body>
 </html>
+
+
+
 
