@@ -1,0 +1,15 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+                                                                                
+"features": [
+{ "type": "Feature", "properties": { "Id": 0, "numero": 1, "descriz": "1 via di Roma (anche contromano)" }, "geometry": { "type": "Point", "coordinates": [ 12.203819728452293, 44.417581152150177 ] } },
+{ "type": "Feature", "properties": { "Id": 0, "numero": 3, "descriz": "3 via Ponte Marino" }, "geometry": { "type": "Point", "coordinates": [ 12.199933999720557, 44.419110236687011 ] } },
+{ "type": "Feature", "properties": { "Id": 0, "numero": 2, "descriz": "2 via Mariani" }, "geometry": { "type": "Point", "coordinates": [ 12.202633848227217, 44.417407604008396 ] } },
+{ "type": "Feature", "properties": { "Id": 0, "numero": 4, "descriz": "4 via Guerrini (anche contromano)" }, "geometry": { "type": "Point", "coordinates": [ 12.199253711538502, 44.415521783281307 ] } },
+{ "type": "Feature", "properties": { "Id": 0, "numero": 5, "descriz": "5 via Guaccimanni" }, "geometry": { "type": "Point", "coordinates": [ 12.200334612633881, 44.415284256521275 ] } },
+{ "type": "Feature", "properties": { "Id": 0, "numero": 6, "descriz": "6 via Baccarini" }, "geometry": { "type": "Point", "coordinates": [ 12.199893382341932, 44.414901491065322 ] } },
+{ "type": "Feature", "properties": { "Id": 0, "numero": 7, "descriz": "7 via Rondinelli" }, "geometry": { "type": "Point", "coordinates": [ 12.198903703247764, 44.413727312324873 ] } },
+{ "type": "Feature", "properties": { "Id": 0, "numero": 8, "descriz": "8 via Matteucci" }, "geometry": { "type": "Point", "coordinates": [ 12.200118928412142, 44.419634354140996 ] } }
+]
+}
